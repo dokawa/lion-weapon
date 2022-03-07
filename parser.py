@@ -23,13 +23,6 @@ class Parser:
         valor_liq = val_liq_re.search(text).group(1)
         return self.parse_value_string(valor_liq)
 
-    def parse_value_string(self, string):
-        if not string:
-            return
-
-        clean_string = string.replace('.', '').replace(',', '.')
-        return float(clean_string)
-
     def get_date(self, text):
         date_regex_1 = re.compile(r'\s(\d{2}/\d{2}/\d{4})\s{2}')
         date_regex_2 = re.compile(r'\d+ \d (\d{2}\/\d{2}\/\d{4})\s')
@@ -71,3 +64,10 @@ class Parser:
                      + f"{space}{c_or_d}{end}"
         negotiation_line_re = re.compile(expression)
         return negotiation_line_re
+
+    def parse_value_string(self, string):
+        if not string:
+            return
+
+        clean_string = string.replace('.', '').replace(',', '.')
+        return float(clean_string)
