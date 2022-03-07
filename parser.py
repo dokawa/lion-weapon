@@ -1,11 +1,14 @@
 import re
 
+
 class Parser:
 
     def get_id(self, text):
-        id_regex = re.compile(r'\d{2}\/\d{2}\/\d{4}\s+(\d+)\s')
-        search = id_regex.search(text).group(1)
-        return search
+        id_regex_1 = re.compile(r'\d{2}\/\d{2}\/\d{4}\s+(\d+)\s')
+        id_regex_2 = re.compile(r'(\d+) \d \d{2}\/\d{2}\/\d{4}\s')
+
+        search = id_regex_1.search(text) or id_regex_2.search(text)
+        return search.group(1)
 
     def get_total_value(self, text):
         total_value_regex = re.compile(
@@ -28,9 +31,10 @@ class Parser:
         return float(clean_string)
 
     def get_date(self, text):
-        date_regex = re.compile(r'\s(\d{2}/\d{2}/\d{4})\s{2}')
-        date = date_regex.search(text).group(1)
-        return date
+        date_regex_1 = re.compile(r'\s(\d{2}/\d{2}/\d{4})\s{2}')
+        date_regex_2 = re.compile(r'\d+ \d (\d{2}\/\d{2}\/\d{4})\s')
+        date = date_regex_1.search(text) or date_regex_2.search(text)
+        return date.group(1)
 
     def get_emol(self, text):
         emol_re = re.compile(r'Emolumentos (.*,\d{2})')
@@ -43,23 +47,22 @@ class Parser:
         return self.parse_value_string(taxa_liq)
 
     def get_negotiation_line(self, text):
-        negotiation_line_re = re.compile(
-            "1-BOVESPA (C|V)\s+(OPCAO DE COMPRA|OPCAO DE VENDA|EXERC|OPC|VENDA|VISTA|FRACIONARIO|TERMO) (?:\d{2}\/\d{2} )?(.*)(ON|PN)\D+(?:N1|2|M)?\D+(\d+)\s+(\d+,\d{2})\s(.*,\d{2})\s(C|D)$")
+        negotiation_line_re = self.get_negotiation_line_re()
 
     def get_negotiation_line_re(self):
         start = "1-BOVESPA "
         c_or_v = "(C|V)"
-        spaces = "\s+"
+        spaces = "\\s+"
         op_type = "(OPCAO DE COMPRA|OPCAO DE VENDA|EXERC|OPC|VENDA|VISTA|FRACIONARIO|TERMO)"
-        optional_deadline = " (?:\d{2}\/\d{2} )?"
+        optional_deadline = " (?:\\d{2}\\/\\d{2} )?"
         anything = "(.*)"
         share_type = "(ON|PN)"
-        non_digits = "\D+"
+        non_digits = "\\D+"
         optional_level = "(?:N1|2|M)?"
-        quantity = "(\d+)"
-        price = "(\d+,\d{2})"
-        space = "\s"
-        value = "(.*,\d{2})"
+        quantity = "(\\d+)"
+        price = "(\\d+,\\d{2})"
+        space = "\\s"
+        value = "(.*,\\d{2})"
         c_or_d = "(C|D)"
         end = "$"
 
