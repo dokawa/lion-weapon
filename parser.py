@@ -23,6 +23,13 @@ class Parser:
         valor_liq = val_liq_re.search(text).group(1)
         return self.parse_value_string(valor_liq)
 
+    def parse_value_string(self, string):
+        if not string:
+            return
+
+        clean_string = string.replace('.', '').replace(',', '.')
+        return float(clean_string)
+
     def get_date(self, text):
         date_regex_1 = re.compile(r'\s(\d{2}/\d{2}/\d{4})\s{2}')
         date_regex_2 = re.compile(r'\d+ \d (\d{2}\/\d{2}\/\d{4})\s')
@@ -38,6 +45,19 @@ class Parser:
         taxa_liq_re = re.compile(r'Taxa de liquidação (.*,\d{2})')
         taxa_liq = taxa_liq_re.search(text).group(1)
         return self.parse_value_string(taxa_liq)
+
+    def get_quantidade_total(self, text):
+        quantidade_total_re = re.compile(r'Quantidade Total: (\d+\.?\d+)')
+        search = quantidade_total_re.search(text)
+        quantidade_total = search.group(1) if search else 0
+        return self.parse_value_string(quantidade_total)
+
+    def get_despesas(self, text):
+        despesas_re_1 = re.compile(r'Total Corretagem \/ Despesas\s+(\d+,\d{2})+')
+        despesas_re_2 = re.compile(r'Total Custos / Despesas\s+(\d+,\d{2})+')
+        search = despesas_re_1.search(text) or despesas_re_2.search(text)
+        despesas = search.group(1)
+        return self.parse_value_string(despesas)
 
     def get_negotiation_line(self, text):
         negotiation_line_re = self.get_negotiation_line_re()
@@ -63,11 +83,5 @@ class Parser:
                      + f"{non_digits}{optional_level}{non_digits}{quantity}{spaces}{price}{space}{value}" \
                      + f"{space}{c_or_d}{end}"
         negotiation_line_re = re.compile(expression)
+
         return negotiation_line_re
-
-    def parse_value_string(self, string):
-        if not string:
-            return
-
-        clean_string = string.replace('.', '').replace(',', '.')
-        return float(clean_string)
