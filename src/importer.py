@@ -4,7 +4,7 @@ from collections import namedtuple
 from os import listdir
 from os.path import isfile, join
 
-from src.file_parser import Parser
+from file_parser import Parser
 
 
 class Importer:

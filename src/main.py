@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from importer import Importer 
 from df_utils import group_weighted_mean_factory, add_new_entries, get_average_price_df, get_qtd, \
-    get_exceptional_earnings_since_2018, get_last_state_from_2021
+    get_exceptional_earnings_since_2018
 
 raw_df = Importer().process_files()
 df = raw_df
