@@ -4,7 +4,7 @@ from collections import namedtuple
 from os import listdir
 from os.path import isfile, join
 
-from src.file_parser import Parser
+from file_parser import Parser
 
 
 class Importer:
@@ -28,14 +28,13 @@ class Importer:
                 print(f"{i + 1} de {len(notas)} documentos processados.")
 
         df = pd.DataFrame(operations)
+
         return df
 
     def process_pdf(self, pdf):
         text = ""
         for j, page in enumerate(pdf.pages):
             text += page.extract_text()
-
-        #         print(text)
 
         id = self.parser.get_id(text)
         date = self.parser.get_date(text)
@@ -49,8 +48,10 @@ class Importer:
                         ('ITAUUNIBANCO', 'PN'): 'ITUB4', ('BRASILAGRO', 'ON'): 'AGRO3',
                         ('BRASIL', 'ON'): 'BBAS3', ('PORTO SEGURO', 'ON'): 'PSSA3',
                         ('ENERGIAS BR', 'ON'): 'ENBR3', ('VALE', 'ON'): 'VALE3',
-                        ('ENAUTA PART', 'ON'): 'ENAT3'
+                        ('ENAUTA PART', 'ON'): 'ENAT3', ('EZTEC', 'ON'): 'EZTC3', 
+                        ('BRADESPAR', 'PN'): 'BRAP4', ('BRADESPAR', 'ON'): 'BRAP3',
                         }
+    
         return company_dict[(name, stock_type)]
 
     def get_filepaths(self, folder_path):

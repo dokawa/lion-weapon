@@ -69,7 +69,19 @@ def get_exceptional_earnings_since_2018(df):
 
     df = add_new_entries(df, datetime(2021, 4, 29), "WEGE3", "C", quantity, price, total, price, total, price)
 
-
+    '''
+    Hoje 07/04/2022 foi aprovado em fato relevante a bonificação de 1 nova ação para cada 10 ações, ou seja, 10% da posição na data de corte.
+    O custo para efeito de IR de cada nova ação será de R$4,128165265.
+    A data ex-bonificação será dia 19/04/2022 e o estará disponível em 25/04/2022 para negociação.
+    '''
     
+    import math
+
+    # Had 3715 stocks at 19/04/2022
+    quantity = math.floor(3715 * 0.1)
+    price = 4.128165265
+    total = quantity * price
+
+    df = add_new_entries(df, datetime(2022, 4, 25), "BBDC4", "C", quantity, price, total, price, total, price)
     
     return df

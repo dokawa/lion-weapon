@@ -1,5 +1,5 @@
-from importer import Importer
-from src.file_parser import Parser
+
+from file_parser import Parser
 
 
 class TestNegotiationLine:
@@ -13,3 +13,4 @@ class TestNegotiationLine:
         assert negotiation_line_re.match("1-BOVESPA C VISTA 01/00 PORTO SEGURO ON  EJ  NM  100  36,11  3.611,00 D")
         assert negotiation_line_re.match("1-BOVESPA C VISTA ITAUUNIBANCO PN      N1 H  100  35,13  3.513,00 D")
         assert negotiation_line_re.match("1-BOVESPA C VISTA ENAUTA PART          ON NM # 1.000 9,42 9.420,00 D")
+        assert negotiation_line_re.match("1-BOVESPA C VISTA BRADESCO          PN EJ N1 900 20,93 18.837,00 D")

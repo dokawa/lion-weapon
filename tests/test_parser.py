@@ -1,6 +1,6 @@
 import pytest
 
-from src.file_parser import Parser
+from file_parser import Parser
 
 
 class TestParser:

@@ -31,10 +31,27 @@ class Parser:
         return float(clean_string)
 
     def get_date(self, text):
-        date_regex_1 = re.compile(r'\s(\d{2}/\d{2}/\d{4})\s{2}')
-        date_regex_2 = re.compile(r'\d+ \d (\d{2}\/\d{2}\/\d{4})\s')
-        date = date_regex_1.search(text) or date_regex_2.search(text)
-        return date.group(1)
+        date_string = self.get_date_format_1(text) or self.get_date_format_2(text)
+        from datetime import datetime
+        return datetime.strptime(date_string, '%d/%m/%Y')
+    
+    def get_date_format_1(self, text):
+        date_regex = re.compile(r'\s(\d{2}/\d{2}/\d{4})\s{2}')
+        found = date_regex.search(text) 
+        if found:
+            date_string = found.group(1).strip()
+        
+            return date_string
+        
+    def get_date_format_2(self, text):
+        date_regex = re.compile(r'\d+ \d (\d{2}\/\d{2}\/\d{4})\s')
+        found = date_regex.search(text) 
+        if found:
+            date_string = found.group(1).strip()
+
+            
+            return date_string
+            
 
     def get_emol(self, text):
         emol_re = re.compile(r'Emolumentos (.*,\d{2})')
@@ -61,7 +78,7 @@ class Parser:
 
     def get_negotiation_line(self, text):
         negotiation_line_re = self.get_negotiation_line_re()
-
+        
     def get_negotiation_line_re(self):
         start = "1-BOVESPA "
         c_or_v = "(C|V)"
@@ -72,6 +89,7 @@ class Parser:
         share_type = "(ON|PN)"
         non_digits = "\\D+"
         optional_level = "(?:N1|2|M)?"
+        # optional_spaces = "\\s*"
         quantity = "([\\d.]+)"
         price = "(\\d+,\\d{2})"
         space = "\\s"
