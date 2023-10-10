@@ -1,8 +1,7 @@
 from datetime import datetime
-import numpy as np
 import pandas as pd
 from importer import Importer 
-from df_utils import group_weighted_mean_factory, add_new_entries, get_average_price_df, get_qtd, \
+from df_utils import group_weighted_mean_factory, get_average_price_df, get_qtd, \
     get_exceptional_earnings_since_2018
 
 raw_df = Importer().process_files()
@@ -23,7 +22,6 @@ df = df.reset_index()
 df = get_exceptional_earnings_since_2018(df)
 
 to_date = datetime(2022, 12, 31)
-# to_date = datetime(2022, 4, 25)
 
 average_price_df = get_average_price_df(df, to_date)
 # display(average_price_df)

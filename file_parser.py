@@ -10,6 +10,7 @@ class Parser:
         search = id_regex_1.search(text) or id_regex_2.search(text)
         return search.group(1)
 
+
     def get_total_value(self, text):
         total_value_regex = re.compile(
             r'Líquido para\s+\d{2}\/\d{2}\/\d{4}\s+(.*,\d{2}).*')
@@ -18,10 +19,12 @@ class Parser:
             1)
         return self.parse_value_string(total_value)
 
+
     def get_valor_liq(self, text):
         val_liq_re = re.compile(r'Valor líquido das operações (.*,\d{2})')
         valor_liq = val_liq_re.search(text).group(1)
         return self.parse_value_string(valor_liq)
+
 
     def parse_value_string(self, string):
         if not string:
@@ -30,11 +33,13 @@ class Parser:
         clean_string = string.replace('.', '').replace(',', '.')
         return float(clean_string)
 
+
     def get_date(self, text):
         date_string = self.get_date_format_1(text) or self.get_date_format_2(text)
         from datetime import datetime
         return datetime.strptime(date_string, '%d/%m/%Y')
     
+
     def get_date_format_1(self, text):
         date_regex = re.compile(r'\s(\d{2}/\d{2}/\d{4})\s{2}')
         found = date_regex.search(text) 
@@ -43,6 +48,7 @@ class Parser:
         
             return date_string
         
+
     def get_date_format_2(self, text):
         date_regex = re.compile(r'\d+ \d (\d{2}\/\d{2}\/\d{4})\s')
         found = date_regex.search(text) 
@@ -58,10 +64,12 @@ class Parser:
         emol = emol_re.search(text).group(1)
         return self.parse_value_string(emol)
 
+
     def get_taxa_liq(self, text):
         taxa_liq_re = re.compile(r'Taxa de liquidação (.*,\d{2})')
         taxa_liq = taxa_liq_re.search(text).group(1)
         return self.parse_value_string(taxa_liq)
+
 
     def get_quantidade_total(self, text):
         quantidade_total_re = re.compile(r'Quantidade Total: (\d+\.?\d+)')
@@ -69,15 +77,14 @@ class Parser:
         quantidade_total = search.group(1) if search else 0
         return self.parse_value_string(quantidade_total)
 
+
     def get_despesas(self, text):
         despesas_re_1 = re.compile(r'Total Corretagem \/ Despesas\s+(\d+,\d{2})+')
         despesas_re_2 = re.compile(r'Total Custos / Despesas\s+(\d+,\d{2})+')
         search = despesas_re_1.search(text) or despesas_re_2.search(text)
         despesas = search.group(1)
         return self.parse_value_string(despesas)
-
-    def get_negotiation_line(self, text):
-        negotiation_line_re = self.get_negotiation_line_re()
+        
         
     def get_negotiation_line_re(self):
         start = "1-BOVESPA "

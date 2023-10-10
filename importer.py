@@ -12,6 +12,7 @@ class Importer:
     def __init__(self):
         self.parser = Parser()
 
+
     def process_files(self):
         files = self.get_filepaths("receipts")
         operations = []
@@ -31,6 +32,7 @@ class Importer:
 
         return df
 
+
     def process_pdf(self, pdf):
         text = ""
         for j, page in enumerate(pdf.pages):
@@ -40,6 +42,7 @@ class Importer:
         date = self.parser.get_date(text)
 
         return self.get_operation(text, date)
+
 
     def get_abbreviation(self, name, stock_type):
         company_dict = {("WEG S.A.", "ON"): "WEGE3", ('WEG', 'ON'): "WEGE3",
@@ -54,11 +57,13 @@ class Importer:
     
         return company_dict[(name, stock_type)]
 
+
     def get_filepaths(self, folder_path):
         folder_path = 'receipts'
         files = [join(folder_path, file) for file in listdir(folder_path) if
                  isfile(join(folder_path, file)) and file.endswith(".pdf")]
         return files
+
 
     def get_operation(self, text, date):
         operations = []
