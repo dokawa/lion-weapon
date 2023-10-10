@@ -22,7 +22,7 @@ class TestParser:
         assert parser.get_valor_liq(pdf_content) == 9530.00
 
     def test_get_date(self, pdf_content, parser):
-        assert parser.get_date(pdf_content) == "01/06/2017"
+        assert parser.get_date(pdf_content).strftime('%d/%m/%Y') == "01/06/2017"
 
     def test_get_emol(self, pdf_content, parser):
         assert parser.get_emol(pdf_content) == 0.47

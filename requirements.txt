@@ -1,7 +1,7 @@
 cffi==1.15.0
 chardet==4.0.0
 cryptography==36.0.1
-numpy==1.19.5
+numpy==1.26.0
 pandas==1.1.5
 pdfminer.six==20211012
 pdfplumber==0.6.0

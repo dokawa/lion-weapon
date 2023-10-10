@@ -25,7 +25,7 @@ class Importer:
                 else:
                     print(pdf.pages[0].extract_text())
                     print(f"Failed to process {nota}")
-                print(f"{i + 1} de {len(notas)} documentos processados.")
+                print(f"{i + 1} de {len(notas)} documents processed.")
 
         df = pd.DataFrame(operations)
 
