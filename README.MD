@@ -5,6 +5,11 @@ Script to parse standard pdf files from stocks purchase and calculate the averag
 These values are important to calculate capital gains for tax declaration purposes in Brazil. 
 
 
+**NOTE**: This is for my personal use, so it expects just stock names from the stocks that I've traded. You can change `get_abbreviation` method on `importer.py` to add more. Also, for exceptional earnings like stock splits, bonus stocks and other events that are not registered in the receipts, are coded for my personal stocks, see `get_exceptional_earnings_since_2018`
+
+**NOTE 2**: Since it uses files in portuguese, some variables are named after the original names in portuguese from the files for easy mapping during development
+
+
 # Setup
 
 It is recommended to use virtualenv

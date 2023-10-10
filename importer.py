@@ -13,19 +13,19 @@ class Importer:
         self.parser = Parser()
 
     def process_files(self):
-        notas = self.get_filepaths("notas")
+        files = self.get_filepaths("receipts")
         operations = []
 
-        for i, nota in enumerate(notas):
-            with pdfplumber.open(nota) as pdf:
+        for i, file in enumerate(files):
+            with pdfplumber.open(file) as pdf:
                 pdf_operations = self.process_pdf(pdf)
 
                 if pdf_operations:
                     operations.extend(pdf_operations)
                 else:
                     print(pdf.pages[0].extract_text())
-                    print(f"Failed to process {nota}")
-                print(f"{i + 1} de {len(notas)} documents processed.")
+                    print(f"Failed to process {file}")
+                print(f"{i + 1} de {len(files)} documents processed.")
 
         df = pd.DataFrame(operations)
 
@@ -55,7 +55,7 @@ class Importer:
         return company_dict[(name, stock_type)]
 
     def get_filepaths(self, folder_path):
-        folder_path = 'notas'
+        folder_path = 'receipts'
         files = [join(folder_path, file) for file in listdir(folder_path) if
                  isfile(join(folder_path, file)) and file.endswith(".pdf")]
         return files
