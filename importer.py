@@ -17,7 +17,12 @@ class Importer:
         files = self.get_filepaths("receipts")
         operations = []
 
+        if not files:
+            print("No documents found")
+            return 
+
         for i, file in enumerate(files):
+
             with pdfplumber.open(file) as pdf:
                 pdf_operations = self.process_pdf(pdf)
 
@@ -26,7 +31,9 @@ class Importer:
                 else:
                     print(pdf.pages[0].extract_text())
                     print(f"Failed to process {file}")
-                print(f"{i + 1} of {len(files)} documents processed.")
+                print(f"{i + 1:3d} of {len(files)} documents processed.")
+
+            break
 
         df = pd.DataFrame(operations)
 

@@ -5,9 +5,11 @@ Script to parse standard pdf files from stocks purchase and calculate the averag
 These values are important to calculate capital gains for tax declaration purposes in Brazil
 
 
-**NOTE**: This is for my personal use, so it expects just stock names from the stocks that I've traded. You can change `get_abbreviation` method on `importer.py` to add more. Also, for exceptional earnings like stock splits, bonus stocks and other events that are not registered in the receipts, are coded for my personal stocks, see `get_exceptional_earnings_since_2018`
+**NOTE**: This is for my personal use, so it expects just stock names from the stocks that I've traded. I couldn't find a source with company names to be able to map for the ones that I don't own. You can change `get_abbreviation` method on `importer.py` to add more. 
 
-**NOTE 2**: Since it uses files in portuguese, some variables are named after the original names in portuguese from the files for easy mapping during development
+**NOTE 2**: For exceptional earnings like stock splits, bonus stocks and other events that are not registered in the receipts, are coded for my personal stocks, see `get_exceptional_earnings_since_2018`
+
+**NOTE 3**: Since it uses files in portuguese, some variables are named after the original names in portuguese from the files for easy mapping during development
 
 
 # Setup
@@ -29,7 +31,7 @@ pip3 install -r requirements.txt
 
 # Usage
 
-Put the receipts in `SINACOR` standard format in a folder called `receipts` in the root directory
+Put the receipts in `SINACOR` standard format in a folder called `receipts` in the root directory. Run the code with:
 
 
 ```
