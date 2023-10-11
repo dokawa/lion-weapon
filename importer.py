@@ -13,7 +13,7 @@ class Importer:
         self.parser = Parser()
 
 
-    def process_files(self):
+    def process(self):
         files = self.get_filepaths("receipts")
         operations = []
 
@@ -26,7 +26,7 @@ class Importer:
                 else:
                     print(pdf.pages[0].extract_text())
                     print(f"Failed to process {file}")
-                print(f"{i + 1} de {len(files)} documents processed.")
+                print(f"{i + 1} of {len(files)} documents processed.")
 
         df = pd.DataFrame(operations)
 
@@ -85,32 +85,59 @@ class Importer:
 
         for line in text.split('\n'):
             if linha_negocio_re.match(line):
-                compra_venda = linha_negocio_re.match(
-                    line).group(1)
-                esp_titulo = linha_negocio_re.match(
-                    line).group(3).strip()
+                compra_venda = self.get_venda(linha_negocio_re, line)
+                esp_titulo = self.get_esp_titulo(linha_negocio_re, line)
 
-                ativo = linha_negocio_re.match(line).group(4)
+                ativo = self.get_ativo(linha_negocio_re, line)
 
                 abbreviation = self.get_abbreviation(esp_titulo, ativo)
 
-                quantidade = self.parser.parse_value_string(
-                    linha_negocio_re.match(line).group(5))
+                quantidade = self.get_quantidade(linha_negocio_re, line)
 
-                preco_ajuste = self.parser.parse_value_string(linha_negocio_re.match(
-                    line).group(6))
+                preco_ajuste = self.get_preco_ajuste(linha_negocio_re, line)
 
-                valor_operacao = float(linha_negocio_re.match(
-                    line).group(7).replace('.', '').replace(',', '.'))
+                valor_operacao = self.get_valor_operacao(linha_negocio_re, line)
 
-                taxa_ajustada = round((quantidade * taxas) / (quantidade_total or quantidade), 2)
+                taxa_ajustada = self.get_taxa_ajustada(taxas, quantidade_total, quantidade)
 
-                total_ajustado = valor_operacao + taxa_ajustada if compra_venda == "C" else valor_operacao - taxa_ajustada
+                total_ajustado = self.get_total_ajustado(compra_venda, valor_operacao, taxa_ajustada)
 
-                preco_ajustado = total_ajustado / quantidade
+                preco_ajustado = self.get_preco_ajustado(quantidade, total_ajustado)
 
                 operations.append(Neg(date, compra_venda, abbreviation, esp_titulo, ativo, quantidade,
                                       preco_ajuste, valor_operacao, taxas, total_ajustado, preco_ajustado))
 
         return operations
+
+    def get_preco_ajustado(self, quantidade, total_ajustado):
+        return total_ajustado / quantidade
+
+    def get_total_ajustado(self, compra_venda, valor_operacao, taxa_ajustada):
+        return valor_operacao + taxa_ajustada if compra_venda == "C" else valor_operacao - taxa_ajustada
+
+    def get_taxa_ajustada(self, taxas, quantidade_total, quantidade):
+        return round((quantidade * taxas) / (quantidade_total or quantidade), 2)
+
+    def get_valor_operacao(self, linha_negocio_re, line):
+        return float(linha_negocio_re.match(
+                    line).group(7).replace('.', '').replace(',', '.'))
+
+    def get_preco_ajuste(self, linha_negocio_re, line):
+        return self.parser.parse_value_string(linha_negocio_re.match(
+                    line).group(6))
+
+    def get_quantidade(self, linha_negocio_re, line):
+        return self.parser.parse_value_string(
+                    linha_negocio_re.match(line).group(5))
+
+    def get_ativo(self, linha_negocio_re, line):
+        return linha_negocio_re.match(line).group(4)
+
+    def get_esp_titulo(self, linha_negocio_re, line):
+        return linha_negocio_re.match(
+                    line).group(3).strip()
+
+    def get_venda(self, linha_negocio_re, line):
+        return linha_negocio_re.match(
+                    line).group(1)
 

@@ -4,7 +4,7 @@ from importer import Importer
 from df_utils import group_weighted_mean_factory, get_average_price_df, get_qtd, \
     get_exceptional_earnings_since_2018
 
-raw_df = Importer().process_files()
+raw_df = Importer().process()
 df = raw_df
 df.data = raw_df.data.apply(pd.to_datetime)
 df.qtd = df.apply(lambda line: line.qtd if line.compra_venda == "C" else -line.qtd, axis=1)
