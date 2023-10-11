@@ -33,8 +33,6 @@ class Importer:
                     print(f"Failed to process {file}")
                 print(f"{i + 1:3d} of {len(files)} documents processed.")
 
-            break
-
         df = pd.DataFrame(operations)
 
         return df
