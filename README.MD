@@ -1,8 +1,8 @@
 # Lion Weapon
 
-Script to parse standard pdf files from stocks purchase and calculate the average buying price for each stock.
+Script to parse standard pdf files from stocks purchase and calculate the average buying price for each stock
 
-These values are important to calculate capital gains for tax declaration purposes in Brazil. 
+These values are important to calculate capital gains for tax declaration purposes in Brazil
 
 
 **NOTE**: This is for my personal use, so it expects just stock names from the stocks that I've traded. You can change `get_abbreviation` method on `importer.py` to add more. Also, for exceptional earnings like stock splits, bonus stocks and other events that are not registered in the receipts, are coded for my personal stocks, see `get_exceptional_earnings_since_2018`
@@ -12,9 +12,9 @@ These values are important to calculate capital gains for tax declaration purpos
 
 # Setup
 
-It is recommended to use virtualenv
+It is recommended to use `virtualenv`
 
-Create a virtualenv
+Create a `virtualenv`
 
 ```
 virtualenv lion-weapon-venv
@@ -45,12 +45,12 @@ py.test tests/
 
 # Running a Jupyter Server (Optional)
 
-It is useful for debugging and other data manipulation when necessary.
+It is useful for debugging and other data manipulation when necessary
 
 
 ### Running the container
 
-Replace `folder_path` with the repo path on the host and `container_name` with one to your liking.
+Replace `folder_path` with the repo path on the host and `container_name` with one to your liking
 
 ```
 docker run -it -p 8888:8888 -p 6006:6006 -v <folder_path>:/lion-weapon --name <container_name> tensorflow/tensorflow /bin/bash
