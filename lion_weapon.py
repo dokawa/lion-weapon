@@ -7,15 +7,18 @@ from df_utils import add_new_entries, group_weighted_mean_factory, get_average_p
 class LionWeapon:
 
     def __init__(self):
-        self.raw_df = Importer().process()
-        self.df = self.raw_df
+        self.raw_df = None
+        self.df = None
         self.final_df = None
 
-    def calculate(self):
+    def calculate(self, filepath_list):
+        self.raw_df = Importer().process(filepath_list)
+        self.df = self.raw_df
         print(self.raw_df)
         if hasattr(self.raw_df, 'data'):
             self.format_df()
             self.calculate_avg_prices()
+        return self.raw_df
 
 
     def format_df(self):
@@ -24,7 +27,7 @@ class LionWeapon:
 
         weighted_mean = group_weighted_mean_factory(self.raw_df, "qtd")
 
-        self.df = self.raw_df.sort_values("data").groupby(by= ["data", "abbreviation", "compra_venda"], axis=0) \
+        self.df = self.raw_df.sort_values("data").groupby(by= ["data", "abbreviation", "compra_venda"]) \
             .aggregate({"qtd": "sum", "preco": "mean",
                         "valor_operacao": "sum", "taxas": "max", "total_ajustado": "sum", "preco_ajustado": weighted_mean})
 
@@ -74,7 +77,6 @@ class LionWeapon:
         A data ex-bonificação será dia 19/04/2022 e o estará disponível em 25/04/2022 para negociação.
         '''
 
-
         import math
 
         # Had 3715 stocks at 19/04/2022
@@ -96,3 +98,11 @@ class LionWeapon:
         self.final_df.columns = ["preco_medio", "qtd"]
         self.final_df = self.final_df[self.final_df.qtd != 0]
         print(self.final_df)
+
+    def get_position_at_date(self, date):
+        df = self.df.copy()[["data", "abbreviation", "qtd"]]
+        df = df[df.data < date].sort_values("data").groupby(by= ["abbreviation"]) \
+            .aggregate({"qtd": "sum"})
+        df = df[df.qtd > 0]
+        df = df.reset_index()
+        return df

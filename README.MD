@@ -4,13 +4,11 @@ Script to parse standard pdf files from stocks purchase and calculate the averag
 
 These values are important to calculate capital gains for tax declaration purposes in Brazil
 
-
-**NOTE**: This is for my personal use, so it expects just stock names from the stocks that I've traded. I couldn't find a source with company names to be able to map for the ones that I don't own. You can change `get_abbreviation` method on `importer.py` to add more. 
+**NOTE**: This is for my personal use, so it expects just stock names from the stocks that I've traded. I couldn't find a source with company names to be able to map for the ones that I don't own. You can change `get_abbreviation` method on `importer.py` to add more.
 
 **NOTE 2**: For exceptional earnings like stock splits, bonus stocks and other events that are not registered in the receipts, are coded for my personal stocks, see `get_exceptional_earnings_since_2018`
 
 **NOTE 3**: Since it uses files in portuguese, some variables are named after the original names in portuguese from the files for easy mapping during development
-
 
 # Setup
 
@@ -33,7 +31,6 @@ pip3 install -r requirements.txt
 
 Put the receipts in `SINACOR` standard format in a folder called `receipts` in the root directory. Run the code with:
 
-
 ```
 python3 main.py
 ```
@@ -44,11 +41,9 @@ python3 main.py
 py.test tests/
 ```
 
-
 # Running a Jupyter Server (Optional)
 
 It is useful for debugging and other data manipulation when necessary
-
 
 ### Running the container
 
@@ -59,16 +54,30 @@ docker run -it -p 8888:8888 -p 6006:6006 -v <folder_path>:/lion-weapon --name <c
 ```
 
 E.g.
+
 ```
 docker run -it -p 8888:8888 -p 6006:6006 -v ~/lion-weapon:/lion-weapon --name lion-weapon tensorflow/tensorflow /bin/bash
 ```
 
 Install the requirements in the container
+
 ```
 pip3 install -r requirements.txt
 ```
 
 Run the Jupyter server
+
 ```
 jupyter notebook --ip 0.0.0.0 --port 8888 --allow-root --NotebookApp.iopub_data_rate_limit=1.0e10
 ```
+
+### Troubleshooting
+
+If you see an error like this on container bash:
+
+```
+[W 2024-01-30 11:21:41.345 ServerApp] 403 GET /api/kernelspecs?1706613701341 (172.17.0.1) 0.27ms referer=None
+[W 2024-01-30 11:21:41.345 ServerApp] wrote error: 'Forbidden'
+```
+
+Try downgrading jupyter-server to `jupyter-server==1.24.0`

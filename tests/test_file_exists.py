@@ -7,6 +7,6 @@ class TestFileExists:
     def test_lines(self, format_df):
         lion_weapon = LionWeapon()
         lion_weapon.raw_df = None
-        lion_weapon.calculate()
+        lion_weapon.calculate([])
         format_df.assert_not_called()
         

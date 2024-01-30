@@ -1,8 +1,7 @@
 import pdfplumber
 import pandas as pd
 from collections import namedtuple
-from os import listdir
-from os.path import isfile, join
+
 
 from file_parser import Parser
 
@@ -13,15 +12,10 @@ class Importer:
         self.parser = Parser()
 
 
-    def process(self):
-        files = self.get_filepaths("receipts")
+    def process(self, filepath_list):
         operations = []
 
-        if not files:
-            print("No documents found")
-            return 
-
-        for i, file in enumerate(files):
+        for i, file in enumerate(filepath_list):
 
             with pdfplumber.open(file) as pdf:
                 pdf_operations = self.process_pdf(pdf)
@@ -31,7 +25,7 @@ class Importer:
                 else:
                     print(pdf.pages[0].extract_text())
                     print(f"Failed to process {file}")
-                print(f"{i + 1:3d} of {len(files)} documents processed.")
+                print(f"{i + 1:3d} of {len(filepath_list)} documents processed.")
 
         df = pd.DataFrame(operations)
 
@@ -63,11 +57,6 @@ class Importer:
         return company_dict[(name, stock_type)]
 
 
-    def get_filepaths(self, folder_path):
-        folder_path = 'receipts'
-        files = [join(folder_path, file) for file in listdir(folder_path) if
-                 isfile(join(folder_path, file)) and file.endswith(".pdf")]
-        return files
 
 
     def get_operation(self, text, date):
