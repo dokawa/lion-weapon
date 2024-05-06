@@ -1,5 +1,7 @@
 .idea
 __pycache__/
 *.pdf
+*.csv
+*.txt
 .ipynb_checkpoints/
 .pytest_cache/

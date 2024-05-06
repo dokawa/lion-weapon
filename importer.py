@@ -34,7 +34,7 @@ class Importer:
 
     def process_pdf(self, pdf):
         text = ""
-        for j, page in enumerate(pdf.pages):
+        for page in pdf.pages:
             text += page.extract_text()
 
         id = self.parser.get_id(text)
