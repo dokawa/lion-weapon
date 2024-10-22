@@ -10,6 +10,10 @@ These values are important to calculate capital gains for tax declaration purpos
 
 **NOTE 3**: Since it uses files in portuguese, some variables are named after the original names in portuguese from the files for easy mapping during development
 
+# Requirements
+
+* Python < 3.10 (tested with Python 3.9.20)
+
 # Setup
 
 It is recommended to use `virtualenv`
@@ -73,6 +77,36 @@ jupyter notebook --ip 0.0.0.0 --port 8888 --allow-root --NotebookApp.iopub_data_
 
 ### Troubleshooting
 
+#### Venv error
+
+I got this error while running with Python 3.10 (Python 3.10.14)
+
+```
+Building wheels for collected packages: pandas
+  Building wheel for pandas (pyproject.toml) ... error
+  error: subprocess-exited-with-error
+
+  × Building wheel for pandas (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [1159 lines of output]
+
+[...]
+
+      pandas/_libs/algos.c:785:10: fatal error: numpy/arrayobject.h: No such file or directory
+        785 | #include "numpy/arrayobject.h"
+            |          ^~~~~~~~~~~~~~~~~~~~~
+      compilation terminated.
+      error: command '/usr/sbin/gcc' failed with exit code 1
+      [end of output]
+
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+  ERROR: Failed building wheel for pandas
+Failed to build pandas
+ERROR: Could not build wheels for pandas, which is required to install pyproject.toml-based projects
+```
+
+#### Jupyter error
+
 If you see an error like this on container bash:
 
 ```
@@ -81,3 +115,4 @@ If you see an error like this on container bash:
 ```
 
 Try downgrading jupyter-server to `jupyter-server==1.24.0`
+

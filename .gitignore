@@ -5,3 +5,5 @@ __pycache__/
 *.txt
 .ipynb_checkpoints/
 .pytest_cache/
+
+.tool-versions

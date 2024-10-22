@@ -3,23 +3,20 @@ import pandas as pd
 from importer import Importer 
 from df_utils import add_new_entries, group_weighted_mean_factory, get_average_buy_price_df, get_qtd
 
-
+# This consolidates multiple lines for the same stock
 def format_df(raw_df):
     df = raw_df
     df.data = raw_df.data.apply(pd.to_datetime)
+    df.compra_venda = raw_df.compra_venda.astype(str)
     df.qtd = df.apply(lambda line: float(line.qtd) if line.compra_venda == "C" else -float(line.qtd), axis=1)
+    df.preco = raw_df.preco.astype(float)
 
     weighted_mean = group_weighted_mean_factory(raw_df, "qtd")
 
-    for i in range(raw_df.shape[0]):
-        r = raw_df.iloc[:i, :]
-
-
-        df = r.sort_values("data").groupby(by= ["data", "abbreviation", "compra_venda"]) \
+    df = df.sort_values("data").groupby(by= ["data", "abbreviation", "compra_venda"]) \
             .aggregate({"qtd": "sum", "preco": "mean",
                         "valor_operacao": "sum", "taxas": "max", "total_ajustado": "sum", "preco_ajustado": weighted_mean})
-
-
+    
     df = df.reset_index()
 
     return df
@@ -78,7 +75,6 @@ def get_exceptional_earnings_since_2018(df):
 
 def calculate_avg_prices(df, to_date):
     average_price_df = get_average_buy_price_df(df, to_date)
-    # display(average_price_df)
     qtd_df = get_qtd(df, to_date)
 
     final_df = average_price_df.merge(qtd_df, on="abbreviation")
@@ -94,6 +90,9 @@ class LionWeapon:
         self.final_df = None
 
     def calculate(self, filepath_list, to_date):
+        if not filepath_list:
+            return None
+
         self.raw_df = Importer().process(filepath_list)
         self.df = self.raw_df
 
@@ -102,10 +101,9 @@ class LionWeapon:
             self.df = get_exceptional_earnings_since_2018(self.df)
             self.df = format_df(self.df)
 
-
             self.df = calculate_avg_prices(self.df, to_date)
         self.df = self.df.reset_index()
-        return self.df
+        return self.raw_df, self.df
 
     def get_position_at_date(self, date):
         df = self.df.copy()[["data", "abbreviation", "qtd"]]

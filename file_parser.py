@@ -74,7 +74,7 @@ class Parser:
 
 
     def get_taxa_liq(self, text):
-        taxa_liq_re = re.compile(r'Taxa de liquidação (.*,\d{2})')
+        taxa_liq_re = re.compile(r'Taxa de liquidação\s+(.*,\d{2})')
         taxa_liq = taxa_liq_re.search(text).group(1)
         return self.parse_value_string(taxa_liq)
 

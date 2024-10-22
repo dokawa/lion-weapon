@@ -56,7 +56,7 @@ def get_profit_df(sell_df):
     return sell_df
 
 def get_qtd(df, date):
-    selected = df[(df.data < date)]
+    selected = df[df.data < date]
     grouped = selected.groupby(by=["abbreviation"])
     qtd_df = grouped.agg({"qtd": "sum"})
     return pd.DataFrame(qtd_df)

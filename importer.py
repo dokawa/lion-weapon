@@ -25,22 +25,28 @@ class Importer:
                 else:
                     print(pdf.pages[0].extract_text())
                     print(f"Failed to process {file}")
-                print(f"{i + 1:3d} of {len(filepath_list)} documents processed.")
+                print(f"{i + 1:3d} of {len(filepath_list)} documents processed. ({filepath_list[i]})")
 
         df = pd.DataFrame(operations)
 
         return df
 
-
     def process_pdf(self, pdf):
-        text = ""
+        operations = []
         for page in pdf.pages:
-            text += page.extract_text()
+            text = page.extract_text()
+            if self.is_blank_page(text):
+                # print("====================== blank page")
+                continue
 
-        id = self.parser.get_id(text)
-        date = self.parser.get_date(text)
 
-        return self.get_operation(text, date)
+            # id = self.parser.get_id(text)
+            date = self.parser.get_date(text)
+            operations.extend(self.get_operation(text, date))
+        return operations
+    
+    def is_blank_page(self, text):
+        return not ("Nr. nota" in text or "Nº Nota" in text)
 
 
     def get_abbreviation(self, name, stock_type):
@@ -52,6 +58,7 @@ class Importer:
                         ('ENERGIAS BR', 'ON'): 'ENBR3', ('VALE', 'ON'): 'VALE3',
                         ('ENAUTA PART', 'ON'): 'ENAT3', ('EZTEC', 'ON'): 'EZTC3', 
                         ('BRADESPAR', 'PN'): 'BRAP4', ('BRADESPAR', 'ON'): 'BRAP3',
+                        ('PETROBRAS', 'ON'): 'PETR3', ('PETROBRAS', 'PN'): 'PETR4'
                         }
     
         return company_dict[(name, stock_type)]
@@ -78,6 +85,7 @@ class Importer:
         total_value = self.parser.get_total_value(text)
 
         for line in text.split('\n'):
+
             if linha_negocio_re.match(line):
                 compra_venda = self.get_venda(linha_negocio_re, line)
                 esp_titulo = self.get_esp_titulo(linha_negocio_re, line)
