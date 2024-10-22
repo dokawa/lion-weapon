@@ -91,7 +91,7 @@ class LionWeapon:
 
     def calculate(self, filepath_list, to_date):
         if not filepath_list:
-            return None
+            return None, None
 
         self.raw_df = Importer().process(filepath_list)
         self.df = self.raw_df
