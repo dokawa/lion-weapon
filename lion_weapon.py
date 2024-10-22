@@ -106,6 +106,8 @@ class LionWeapon:
         return self.raw_df, self.df
 
     def get_position_at_date(self, date):
+        if not self.df:
+            return None
         df = self.df.copy()[["data", "abbreviation", "qtd"]]
         df = df[df.data < date].sort_values("data").groupby(by= ["abbreviation"]) \
             .aggregate({"qtd": "sum"})

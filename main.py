@@ -17,7 +17,8 @@ raw_df, df = lp.calculate(filepath_list, datetime(2023, 12, 31))
 # save_csv(lp.get_raw_df())
 
 lp.get_position_at_date(datetime(2023, 12, 31))
-    
-df = read(input_data)
-print(df)
+
+# For crypto    
+#df = read(input_data)
+#print(df)
 
