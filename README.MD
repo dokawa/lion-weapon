@@ -54,13 +54,13 @@ It is useful for debugging and other data manipulation when necessary
 Replace `folder_path` with the repo path on the host and `container_name` with one to your liking
 
 ```
-docker run -it -p 8888:8888 -p 6006:6006 -v <folder_path>:/lion-weapon --name <container_name> tensorflow/tensorflow /bin/bash
+docker run -it -p 8888:8888 -p 6006:6006 -v <local_folder_path>:/home/jovyan/work --name <container_name> jupyter/pyspark-notebook:python-3.9.6 /bin/bash
 ```
 
 E.g.
 
 ```
-docker run -it -p 8888:8888 -p 6006:6006 -v ~/lion-weapon:/lion-weapon --name lion-weapon tensorflow/tensorflow /bin/bash
+docker run -it -p 8888:8888 -p 6006:6006 -v /$(pwd)/lion-weapon:/home/jovyan/work --name lion-weapon jupyter/pyspark-notebook:python-3.9.6 /bin/bash
 ```
 
 Install the requirements in the container
