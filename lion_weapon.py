@@ -50,4 +50,3 @@ class LionWeapon:
         df = df[df.qtd > 0]
         df = df.reset_index()
         return df
-

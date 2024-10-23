@@ -65,8 +65,6 @@ class Importer:
         return company_dict[(name, stock_type)]
 
 
-
-
     def get_operation(self, text, date):
         operations = []
         Neg = namedtuple(
