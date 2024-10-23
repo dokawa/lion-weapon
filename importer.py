@@ -28,6 +28,7 @@ class Importer:
                 print(f"{i + 1:3d} of {len(filepath_list)} documents processed. ({filepath_list[i]})")
 
         df = pd.DataFrame(operations)
+        df = df.sort_values(by='data')
 
         return df
 
