@@ -51,8 +51,9 @@ def apply_exceptional_operations(sell_df):
 
 
 def get_profit_df(sell_df):
-    sell_df["lucro"] = sell_df.preco_venda - sell_df.preco_compra
-    sell_df["lucro_total"] = sell_df.lucro * sell_df.qtd
+    sell_df["lucro_unitario"] = sell_df.preco_venda - sell_df.preco_compra
+    sell_df["lucro_total"] = sell_df.lucro_unitario * sell_df.qtd
+    sell_df["taxadd"] = sell_df.lucro_total * 0.15
     return sell_df
 
 def get_qtd(df, date):

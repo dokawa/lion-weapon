@@ -4,14 +4,14 @@ from datetime import datetime
 def format_df(raw_df):
     df = raw_df
     df.data = raw_df.data.apply(pd.to_datetime, dayfirst=True)
-    # df.qtd = df.apply(lambda line: float(line.qtd) if line.compra_venda == "C" else -float(line.qtd), axis=1)
+    df.preco = raw_df.preco.astype(float)
+    df.qtd = raw_df.qtd.astype(float)
 
-    for i in range(raw_df.shape[0]):
-        r = raw_df.iloc[:i, :]
-        df = r.sort_values("data").groupby(
-            by= ["data", "abbreviation", "compra_venda"]) \
-            .aggregate({"qtd": "sum", "preco": "mean",
-                        "total": "sum"})
+
+
+    df = df.sort_values("data").groupby(by= ["data", "abbreviation", "compra_venda"]) \
+        .aggregate({"qtd": "sum", "preco": "mean", "total": "sum"})
+
 
     df = df.reset_index()
 
