@@ -7,11 +7,8 @@ def format_df(raw_df):
     df.preco = raw_df.preco.astype(float)
     df.qtd = raw_df.qtd.astype(float)
 
-
-
     df = df.sort_values("data").groupby(by= ["data", "abbreviation", "compra_venda"]) \
         .aggregate({"qtd": "sum", "preco": "mean", "total": "sum"})
-
 
     df = df.reset_index()
 
@@ -22,7 +19,9 @@ def get_sell_df(ledger_df, year):
     sell_df = ledger_df[(ledger_df.data > datetime(year, 1, 1)) & (ledger_df.compra_venda == "V")]
     sell_df.loc[:, "preco_compra"] = sell_df.apply(lambda row: get_average_buy_price(ledger_df, row.abbreviation, row.data), axis=1)
     sell_df = sell_df[["data", "abbreviation", "qtd", "preco_compra", "preco"]]
-    sell_df.rename(columns={sell_df.columns[-1]: "preco_venda"}, inplace=True)
+    sell_df.rename(columns={"preco": "preco_venda"}, inplace=True)
+    sell_df.loc[:, "total_compra"] = sell_df.preco_compra * sell_df.qtd
+    sell_df.loc[:, "total_venda"] = sell_df.preco_venda * sell_df.qtd
     return sell_df
 
 
@@ -42,8 +41,9 @@ def weighted_average(group):
 
 
 def get_profit_df(sell_df):
-    sell_df["lucro"] = sell_df.preco_venda - sell_df.preco_compra
-    sell_df["lucro_total"] = sell_df.lucro * sell_df.qtd
+    sell_df = sell_df.copy() 
+    sell_df.loc[:, "lucro"] = sell_df.preco_venda - sell_df.preco_compra
+    sell_df.loc[:, "lucro_total"] = sell_df.lucro * sell_df.qtd
     return sell_df
 
 
