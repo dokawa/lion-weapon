@@ -47,7 +47,7 @@ class Importer:
         return operations
     
     def is_blank_page(self, text):
-        return not ("Nr. nota" in text or "Nº Nota" in text)
+        return not ("Nr. nota" in text or "Nº Nota" in text or "Número da nota" in text)
 
 
     def get_abbreviation(self, name, stock_type):
@@ -55,7 +55,7 @@ class Importer:
                         ("BRADESCO", "PN"): "BBDC4", ('JBS', 'ON'): 'JBSS3',
                         ('ITAUUNIBANCO', 'ON'): 'ITUB3',
                         ('ITAUUNIBANCO', 'PN'): 'ITUB4', ('BRASILAGRO', 'ON'): 'AGRO3',
-                        ('BRASIL', 'ON'): 'BBAS3', ('PORTO SEGURO', 'ON'): 'PSSA3',
+                        ('BRASIL', 'ON'): 'BBAS3', ('BRASIL BBAS3', 'ON'): 'BBAS3', ('PORTO SEGURO', 'ON'): 'PSSA3',
                         ('ENERGIAS BR', 'ON'): 'ENBR3', ('VALE', 'ON'): 'VALE3',
                         ('ENAUTA PART', 'ON'): 'ENAT3', ('EZTEC', 'ON'): 'EZTC3', 
                         ('BRADESPAR', 'PN'): 'BRAP4', ('BRADESPAR', 'ON'): 'BRAP3',

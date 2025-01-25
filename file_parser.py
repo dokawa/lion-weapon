@@ -13,10 +13,12 @@ class Parser:
 
     def get_total_value(self, text):
         total_value_regex = re.compile(
-            r'Líquido para\s+\d{2}\/\d{2}\/\d{4}\s+(.*,\d{2}).*')
+            r'(Líquido para|LÍQUIDO PARA)\s+\d{2}\/\d{2}\/\d{4}\s+(.*[.,]\d{2}).*')
+
         search = total_value_regex.search(text)
+
         total_value = search.group(
-            1)
+            2)
         return self.parse_value_string(total_value)
 
 
@@ -30,8 +32,12 @@ class Parser:
         if not string:
             return
 
-        clean_string = string.replace('.', '').replace(',', '.')
-        return float(clean_string)
+        # Remove dots if there is a comma
+        if "." in string and "," in string:
+            string = string.replace(".", "")
+        # Replace comma with dot for decimal point
+        string = string.replace(",", ".")
+        return float(string)
 
 
     def get_date(self, text):
@@ -41,20 +47,23 @@ class Parser:
     
 
     def get_date_string(self, text):
-        return (self.get_date_format_1(text) or self.get_date_format_2(text) 
-                or self.get_date_format_3(text))
+        return (self.get_c6_date_format(text) or self.get_clear_date_format_1(text) or self.get_clear_date_format_2(text) 
+                or self.get_clear_date_format_3(text))
     
+    def get_c6_date_format(self, text):
+        date_regex = re.compile(r'\d\/\d\s(\d{2}\/\d{2}\/\d{4})\s')
+        return self.get_date_format(text, date_regex)
 
-    def get_date_format_1(self, text):
+    def get_clear_date_format_1(self, text):
         date_regex = re.compile(r'\s(\d{2}/\d{2}/\d{4})\s{2}')
         return self.get_date_format(text, date_regex)
         
 
-    def get_date_format_2(self, text):
+    def get_clear_date_format_2(self, text):
         date_regex = re.compile(r'\d+ \d (\d{2}\/\d{2}\/\d{4})\s')
         return self.get_date_format(text, date_regex)
         
-    def get_date_format_3(self, text):
+    def get_clear_date_format_3(self, text):
         date_regex = re.compile(r'\s(\d{2}/\d{2}/\d{4})\s\d+')
         return self.get_date_format(text, date_regex)
 
@@ -87,9 +96,10 @@ class Parser:
 
 
     def get_despesas(self, text):
-        despesas_re_1 = re.compile(r'Total Corretagem \/ Despesas\s+(\d+,\d{2})+')
-        despesas_re_2 = re.compile(r'Total Custos / Despesas\s+(\d+,\d{2})+')
-        search = despesas_re_1.search(text) or despesas_re_2.search(text)
+        despesas_clear_re_1 = re.compile(r'Total Corretagem \/ Despesas\s+(\d+,\d{2})+')
+        despesas_clear_re_2 = re.compile(r'Total Custos / Despesas\s+(\d+,\d{2})+')
+        despesas_c6_re = re.compile(r'Total custos/despesas\s+(\d+,\d{2})+')
+        search = despesas_clear_re_1.search(text) or despesas_clear_re_2.search(text) or despesas_c6_re.search(text)
         despesas = search.group(1)
         return self.parse_value_string(despesas)
         
@@ -98,7 +108,7 @@ class Parser:
         start = "1-BOVESPA "
         c_or_v = "(C|V)"
         spaces = "\\s+"
-        op_type = "(OPCAO DE COMPRA|OPCAO DE VENDA|EXERC|OPC|VENDA|VISTA|FRACIONARIO|TERMO)"
+        op_type = "(OPCAO DE COMPRA|OPCAO DE VENDA|EXERC|OPC|VENDA|VISTA|FRACIONARIO|TERMO|À vista)"
         optional_deadline = " (?:\\d{2}\\/\\d{2} )?"
         anything = "(.*)"
         share_type = "(ON|PN)"
