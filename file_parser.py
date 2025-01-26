@@ -105,7 +105,7 @@ class Parser:
         
         
     def get_negotiation_line_re(self):
-        start = "1-BOVESPA "
+        start = "(1-BOVESPA |BOVESPA 1 |B3 RV LISTADO )"
         c_or_v = "(C|V)"
         spaces = "\\s+"
         op_type = "(OPCAO DE COMPRA|OPCAO DE VENDA|EXERC|OPC|VENDA|VISTA|FRACIONARIO|TERMO|À vista)"

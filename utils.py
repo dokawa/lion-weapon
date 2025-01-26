@@ -50,4 +50,19 @@ def add_exceptional_earnings_since_2018(df):
     total = quantity * price
 
     df = add_new_entries(df, datetime(2022, 4, 25), "BBDC4", "C", quantity, price, total, 0, total, price)
+
+    '''
+    https://api.mziq.com/mzfilemanager/v2/d/5760dff3-15e1-4962-9e81-322a0b3d0bbd/fe7387ef-e5a3-d465-42e7-861ae677858e?origin=1
+
+    [...] desdobramento (“split”) de 100% das ações do BB (BBAS3),
+    atribuindo 01 (uma) nova ação para cada ação emitida, sem alterar o patrimônio do BB e a
+    participação percentual dos acionistas
+    A data-base para a efetivação do split das ações será em 15.04.2024.
+    '''
+
+    quantity = 3100
+    price = 33.148568
+    total = quantity * price
+    df = add_new_entries(df, datetime(2024, 4, 15), "BBAS3", "C", quantity, price, total, 0, total, price)
+
     return df

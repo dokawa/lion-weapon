@@ -121,23 +121,23 @@ class Importer:
 
     def get_valor_operacao(self, linha_negocio_re, line):
         return float(linha_negocio_re.match(
-                    line).group(7).replace('.', '').replace(',', '.'))
+                    line).group(8).replace('.', '').replace(',', '.'))
 
     def get_preco_ajuste(self, linha_negocio_re, line):
         return self.parser.parse_value_string(linha_negocio_re.match(
-                    line).group(6))
+                    line).group(7))
 
     def get_quantidade(self, linha_negocio_re, line):
-        return int(linha_negocio_re.match(line).group(5).replace('.', ''))
+        return int(linha_negocio_re.match(line).group(6).replace('.', ''))
 
     def get_ativo(self, linha_negocio_re, line):
-        return linha_negocio_re.match(line).group(4)
+        return linha_negocio_re.match(line).group(5)
 
     def get_esp_titulo(self, linha_negocio_re, line):
         return linha_negocio_re.match(
-                    line).group(3).strip()
+                    line).group(4).strip()
 
     def get_venda(self, linha_negocio_re, line):
         return linha_negocio_re.match(
-                    line).group(1)
+                    line).group(2)
 

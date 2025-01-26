@@ -15,3 +15,4 @@ class TestNegotiationLine:
         assert negotiation_line_re.match("1-BOVESPA C VISTA ENAUTA PART          ON NM # 1.000 9,42 9.420,00 D")
         assert negotiation_line_re.match("1-BOVESPA C VISTA BRADESCO          PN EJ N1 900 20,93 18.837,00 D")
         assert negotiation_line_re.match("BOVESPA 1 C À vista BRASIL BBAS3 ON NM 200 26,79 5358,00 D")
+        assert negotiation_line_re.match("B3 RV LISTADO C VISTA PETROBRAS ON ED N2 100 40,83 4.083,00 D")
