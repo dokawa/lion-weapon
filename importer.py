@@ -128,8 +128,7 @@ class Importer:
                     line).group(6))
 
     def get_quantidade(self, linha_negocio_re, line):
-        return self.parser.parse_value_string(
-                    linha_negocio_re.match(line).group(5))
+        return int(linha_negocio_re.match(line).group(5).replace('.', ''))
 
     def get_ativo(self, linha_negocio_re, line):
         return linha_negocio_re.match(line).group(4)
