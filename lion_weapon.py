@@ -24,9 +24,17 @@ def calculate_avg_prices(df, to_date):
     qtd_df = get_qtd(df, to_date)
 
     final_df = average_price_df.merge(qtd_df, on="abbreviation")
-    final_df.columns = ["preco_medio", "qtd"]
+    final_df.reset_index(inplace=True)
+    final_df.columns = ["abbreviation", "preco_medio", "qtd"]
     final_df = final_df[final_df.qtd != 0]
+    if 'index' in df.columns:
+        final_df = final_df.drop(columns=['index'])
     return final_df
+
+
+def calculate_total_value(df):
+    df["valor_total"] = df["preco_medio"] * df["qtd"]
+    return df
 
 class LionWeapon:
 
@@ -37,8 +45,8 @@ class LionWeapon:
         if hasattr(df, 'data'):
             df = format_df(df)
             df = calculate_avg_prices(df, to_date)
-        df = df.reset_index()
-        return df
+            df = calculate_total_value(df)
+            return df
     
     # Deprecated
     def get_position_at_date(self, date):
