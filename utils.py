@@ -65,4 +65,17 @@ def add_exceptional_earnings_since_2018(df):
     total = quantity * price
     df = add_new_entries(df, datetime(2024, 4, 15), "BBAS3", "C", quantity, price, total, 0, total, price)
 
+
+
+    '''
+    https://www.itau.com.br/download-file/v2/d/42787847-4cf6-4461-94a5-40ed237dca33/381dd2fe-c509-52de-0470-bca329d4449b?origin=1
+
+    Bonificação em Ações à razão de 10% (dez por cento)
+    '''
+    original_quantity = 5200
+    quantity = original_quantity * 0.1
+    price = 20.519581
+    total = quantity * price 
+    df = add_new_entries(df, datetime(2025, 3, 20), "ITUB3", "C", quantity, price, total, 0, total, price)
+
     return df
